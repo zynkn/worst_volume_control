@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "9c36b5682dc79543476cad3b3720ae2b",
+    "revision": "a01dc5bada406b8752e0173c4f4f65cb",
     "url": "/worst_volume_control/index.html"
   },
   {

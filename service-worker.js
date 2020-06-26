@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/worst_volume_control/precache-manifest.33350ac2aa23a16cdd0f322fe4592387.js"
+  "/worst_volume_control/precache-manifest.d2ffebb40885a8a03944c55a7858a660.js"
 );
 
 self.addEventListener('message', (event) => {
