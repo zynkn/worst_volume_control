@@ -9,7 +9,6 @@ const gravity = 9.8;
 const time = 1;
 
 function App() {
-  const [value,setValue] = useState(50);
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
   const [count, setCount] = useState(0);
@@ -20,15 +19,22 @@ function App() {
       return prev < 300 ? prev+1 : prev;
     })
   },10);
-  useParabola(result*15/100, Number(value), (_x:any,_y:any)=>{
-    setX(_x);
+  useQuadratic(result, 200,(_x:any,_y:any)=>{
+    setX(_x+50);
     setY(_y);
   });
+
+  // useParabola(result*15/100, Number(value), (_x:any,_y:any)=>{
+  //   setX(_x);
+  //   setY(_y);
+  // });
+  //console.log(x,y);
+
   
   const rotate = useSpring({ display: 'inline-block', cursor: 'pointer', transform: `rotate(-${count*15/100}deg)`});
   const fill = useSpring({fill: `rgba(0,208,132,${count/200})` });
-  const translate = useSpring({ transform: `translate(${x-50}px, ${(y)*-1}px)`, visibility: 'visible'});
-  const hidden = useSpring({ visibility: 'hidden', transform: `translate(50px, 0px)`});
+  const translate = useSpring({ transform: `translate(${x -50}px, ${y * -1}px)`, visibility: 'visible'});
+  const hidden = useSpring({ visibility: 'hidden', transform: `translate(-50px, 0px)`});
 
 
   function handleMouseDown(){
@@ -58,12 +64,11 @@ function App() {
           <IconVolume style={fill} />
         </animated.div>
       <div  className="main">
-        <animated.div className="content">{count}</animated.div>
-        <animated.div style={{color: 'white'}}>{count*15}</animated.div>
+        {/* <animated.div className="content">{count}</animated.div>
+        <animated.div style={{color: 'white'}}>{count*15}</animated.div> */}
         <animated.div className="dot" style={shoot ? translate : hidden} />
         <div className="bar" />
       </div>
-      <input type="text" value={value} onChange={(e:any)=>setValue(e.target.value)} />
 
 
     </>
@@ -74,14 +79,35 @@ function App() {
 export default App;
 
 
+function useQuadratic(width: number, height:number, callback:any){
+  // for(let x = x1; x<=width/2; x++){
+  //   let y = (inclination * -1)*x*x + height;
+  //   console.log(x,y);
+  // }
 
-// let T = count/100;
-// let seta = 45 * Math.PI /180;
-// let x = velocity*Math.cos(seta)*T;
-// let y = velocity*Math.sin(seta)*T - (gravity*T*T*0.5);
-// let top = velocity*Math.sin(seta)/gravity;
-// console.log(seta,T, x.toFixed(2),y.toFixed(2),top);
+  React.useEffect(()=>{
+    if(width !== 0){
+      let x1 = (width/2) * -1;
+      let inc = width/100;
+      let inclination = height/(x1*x1);
+      console.log(`기울기 ${inclination}`)
+      let timerId:any = null;
+      let x = 0;
+      timerId = setInterval(()=>{
+        let y = ((inclination * -1) * (x+x1) * (x+x1) + height ) < 0 ? 0 : ((inclination * -1) * (x+x1) * (x+x1) + height );
+        //console.log(x,y);
+        callback(x,y);
+        if(x>=width){
+          clearInterval(timerId);
+        }
+        x+=inc;
 
+        
+      },10);
+    }
+
+  },[width]);
+}
 function useParabola(degree:number,velocity:number, callback:any){
   React.useEffect(()=>{
     let timerId:any = null;
